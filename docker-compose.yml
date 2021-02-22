@@ -1,0 +1,17 @@
+version: '3.5'
+
+services:
+
+  php:
+    image: likesistemas/php-dev:73
+    entrypoint: bash
+    command: composer test:ci
+    environment:
+      - GITHUB_TOKEN=$GITHUB_TOKEN
+      - GITHUB_OWNER=$GITHUB_OWNER
+      - GITHUB_REPO=$GITHUB_REPO
+      - GITHUB_PR_NUMBER=$GITHUB_PR_NUMBER
+    volumes:
+      - ./:/var/www/
+    stdin_open: true
+    tty: true
