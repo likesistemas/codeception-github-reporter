@@ -16,7 +16,12 @@
     },
     "autoload": {
         "psr-4": {
-            "Like\\Codeception\\GithubReporter\\": "./src/"
+            "Like\\Codeception\\": "./src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Like\\Codeception\\Tests\\": "./tests/"
         }
     },
     "require-dev": {

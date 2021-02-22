@@ -1,6 +1,6 @@
 <?php
 
-namespace Like\Codeception\GithubReporter;
+namespace Like\Codeception;
 
 use Codeception\Event\FailEvent;
 use Codeception\Event\TestEvent;
