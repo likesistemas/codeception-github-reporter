@@ -1,0 +1,24 @@
+{
+    "name": "likesistemas/codeception-github-reporter",
+    "description": "Reports unit test data for a pull request.",
+    "type": "library",
+    "authors": [
+        {
+            "name": "Ricardo Paes",
+            "email": "ricardo@likesistemas.com.br"
+        }
+    ],
+    "require": {
+        "php": ">=5.6",
+        "ext-curl": "*",
+        "guzzlehttp/guzzle": "^7.2"
+    },
+    "autoload": {
+        "psr-4": {
+            "Like\\Codeception\\GithubReporter\\": "./src/"
+        }
+    },
+    "require-dev": {
+        "codeception/codeception": "^4.1"
+    }
+}
