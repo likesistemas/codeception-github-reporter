@@ -2,6 +2,7 @@
     "name": "likesistemas/codeception-github-reporter",
     "description": "Reports unit test data for a pull request.",
     "type": "library",
+    "license": "MIT",
     "authors": [
         {
             "name": "Ricardo Paes",
@@ -11,7 +12,7 @@
     "require": {
         "php": ">=5.6",
         "ext-curl": "*",
-        "guzzlehttp/guzzle": "^7.2"
+        "guzzlehttp/guzzle": "^6.0 | ^7.0"
     },
     "autoload": {
         "psr-4": {

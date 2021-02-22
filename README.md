@@ -32,7 +32,7 @@ extensions:
 
 ### Enviroment Variables
 
-GITHUB_OWNER: Owner of repository
-GITHUB_REPO: Name of repository
-GITHUB_PR_NUMBER: Number of pull request of repository
-GITHUB_TOKEN: Token of the user's github who will post the comment 
+- GITHUB_OWNER: Owner of repository
+- GITHUB_REPO: Name of repository
+- GITHUB_PR_NUMBER: Number of pull request of repository
+- GITHUB_TOKEN: Token of the user's github who will post the comment 
