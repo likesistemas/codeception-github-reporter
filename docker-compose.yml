@@ -3,7 +3,7 @@ version: '3.5'
 services:
 
   php:
-    image: likesistemas/php-dev:73
+    image: likesistemas/php-dev:${PHP_VERSION}
     entrypoint: bash
     command: composer test:ci
     environment:

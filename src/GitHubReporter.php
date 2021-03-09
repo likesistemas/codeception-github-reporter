@@ -128,7 +128,9 @@ class GitHubReporter extends Extension {
                 'body' => json_encode(['body' => $this->getBodyMessage()]),
                 'auth' => ['token', $TOKEN]
             ]);
-        } catch(InvalidArgumentException | RequestException $ex) {
+        } catch(RequestException $ex) {
+            $this->writeln("Error on comment in github: {$ex->getMessage()}");
+        } catch(InvalidArgumentException $ex) {
             $this->writeln("Error on comment in github: {$ex->getMessage()}");
         }
     }
