@@ -1,0 +1,29 @@
+name: PHP 5.6
+
+on:
+  push:
+    branches:
+      - master
+
+  pull_request:
+
+jobs:
+  
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Prepare code
+        run: |
+          touch .env
+          echo "GITHUB_OWNER=likesistemas" >> .env
+          echo "GITHUB_REPO=codeception-github-reporter" >> .env
+          echo "GITHUB_PR_NUMBER=${{github.event.number}}" >> .env
+          echo "GITHUB_TOKEN=${{ secrets.GITHUB_TOKEN }}" >> .env
+          echo "PHP_VERSION=56" >> .env
+
+      - name: Run tests
+        run: |
+          docker-compose up
