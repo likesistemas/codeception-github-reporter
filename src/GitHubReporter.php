@@ -43,13 +43,11 @@ class GitHubReporter extends Extension {
         Events::RESULT_PRINT_AFTER => 'result'
     ];
 
-    protected function write($message) {
-        parent::write($message);
+    protected function _write($message) {
         $this->line .= $message;
     }
 
-    protected function writeln($message) {
-        parent::writeln($message);
+    protected function _writeln($message) {
         $this->line .= $message;
 
         if( strlen($this->line) > 0 ) {
@@ -58,24 +56,29 @@ class GitHubReporter extends Extension {
         }
     }
 
-    public function beforeSuite() {
-        $this->writeln("");
+    public function beforeSuite($e) {
+        $this->_writeln("");
+        $this->standardReporter->beforeSuite($e);
     }
 
-    public function success() {
-        $this->write(':heavy_check_mark: ');
+    public function success($e) {
+        $this->_write(':heavy_check_mark: ');
+        $this->standardReporter->testSuccess($e);
     }
 
-    public function fail() {
-        $this->write(':x: ');
+    public function fail($e) {
+        $this->_write(':x: ');
+        $this->standardReporter->testFail($e);
     }
 
-    public function error() {
-        $this->write(':o: ');
+    public function error($e) {
+        $this->_write(':o: ');
+        $this->standardReporter->testError($e);
     }
 
     public function skipped() {
-        $this->write(':white_circle: ');
+        $this->_write(':white_circle: ');
+        $this->standardReporter->testSkipped($e);
     }
 
     public function after(TestEvent $e) {
@@ -83,8 +86,10 @@ class GitHubReporter extends Extension {
         $seconds = (int)($milliseconds = (int)($seconds_input * 1000)) / 1000;
         $time = ($seconds % 60) . (($milliseconds === 0) ? '' : '.' . $milliseconds);
 
-        $this->write(Descriptor::getTestSignature($e->getTest()));
-        $this->writeln(' (' . $time . 's)');
+        $this->_write(Descriptor::getTestSignature($e->getTest()));
+        $this->_writeln(' (' . $time . 's)');
+
+        $this->standardReporter->endTest($e);
     }
 
     public function printFailed(FailEvent $e) {
@@ -96,6 +101,8 @@ class GitHubReporter extends Extension {
         $error[] = Descriptor::getTestFullName($failedTest);
         $error[] = $fail->getMessage();
         $this->errors[] = $error;
+
+        $this->standardReporter->printFail($e);
     }
 
     public function result() {
@@ -106,19 +113,19 @@ class GitHubReporter extends Extension {
 
         try {
             if(!$OWNER) {
-                throw new InvalidArgumentException("É necessário enviar a variável de ambiente `GITHUB_OWNER`.");
+                throw new InvalidArgumentException("It is necessary to send the environment variable `GITHUB_OWNER`.");
             }
 
             if(!$REPO) {
-                throw new InvalidArgumentException("É necessário enviar a variável de ambiente `GITHUB_REPO`.");
+                throw new InvalidArgumentException("It is necessary to send the environment variable `GITHUB_REPO`.");
             }
 
             if(!$PR_NUMBER) {
-                throw new InvalidArgumentException("É necessário enviar a variável de ambiente `GITHUB_PR_NUMBER`.");
+                throw new InvalidArgumentException("It is necessary to send the environment variable `GITHUB_PR_NUMBER`.");
             }
 
             if(!$TOKEN) {
-                throw new InvalidArgumentException("É necessário enviar a variável de ambiente `GITHUB_TOKEN`.");
+                throw new InvalidArgumentException("It is necessary to send the environment variable `GITHUB_TOKEN`.");
             }
 
             $URL = "https://api.github.com/repos/{$OWNER}/{$REPO}/issues/${PR_NUMBER}/comments";
