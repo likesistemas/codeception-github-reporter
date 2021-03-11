@@ -36,6 +36,7 @@ class GitHubReporter extends Extension
     // we are listening for events
     public static $events = [
         Events::SUITE_BEFORE => 'beforeSuite',
+        Events::SUITE_AFTER => 'afterSuite',
         Events::TEST_END => 'after',
         Events::TEST_SUCCESS => 'success',
         Events::TEST_FAIL => 'fail',
@@ -62,8 +63,14 @@ class GitHubReporter extends Extension
     public function beforeSuite($e)
     {
         $suiteName = ucfirst($e->getSuite()->getName());
-        $this->_writeln("\n### {$suiteName} Tests ({$e->getSuite()->count()})");
+        $this->_writeln("\n<details><summary>{$suiteName} Tests ({$e->getSuite()->count()})</summary>");
         $this->standardReporter->beforeSuite($e);
+    }
+
+    public function afterSuite($e)
+    {
+        $this->_writeln('</details>');
+        $this->standardReporter->afterSuite($e);
     }
 
     public function success($e)
@@ -97,7 +104,7 @@ class GitHubReporter extends Extension
         $time = ($seconds % 60).(($milliseconds === 0) ? '' : '.'.$milliseconds);
 
         $this->_write(Descriptor::getTestSignature($e->getTest()));
-        $this->_writeln(' ('.$time.'s)');
+        $this->_writeln(' ('.$time."s)\n");
 
         $this->standardReporter->endTest($e);
     }
