@@ -1,3 +1,9 @@
 {
-    "files.encoding": "utf8"
+    "files.encoding": "utf8",
+    "[php]": {
+        "editor.defaultFormatter": "fterrag.vscode-php-cs-fixer"
+    },
+    "php-cs-fixer.onsave": true,
+    "php-cs-fixer.showOutput": false,
+    "php-cs-fixer.autoFixByBracket": true
 }

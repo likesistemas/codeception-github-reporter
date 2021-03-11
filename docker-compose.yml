@@ -11,6 +11,9 @@ services:
       - GITHUB_OWNER=$GITHUB_OWNER
       - GITHUB_REPO=$GITHUB_REPO
       - GITHUB_PR_NUMBER=$GITHUB_PR_NUMBER
+      - TEST_LANG=$TEST_LANG
+      - TEST_TITLE=$TEST_TITLE
+      - TEST_FOOTER=$TEST_FOOTER
     volumes:
       - ./:/var/www/
     stdin_open: true
