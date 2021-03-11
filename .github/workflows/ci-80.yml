@@ -31,5 +31,5 @@ jobs:
           echo $(docker run -t --network github jwilder/dockerize -wait http://nginx/ -timeout 60s)
           docker-compose ps
           docker-compose logs php
-          docker-compose exec php composer test:ci
+          docker-compose exec -T php composer test:ci
           docker-compose down
