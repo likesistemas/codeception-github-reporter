@@ -127,7 +127,6 @@ class GitHubReporter extends Extension
 
         $body = $this->getBodyMessage($LANG, $TITLE, $FOOTER);
         $this->writeln('');
-        $this->writeln('');
         $this->writeln($body);
 
         try {
@@ -155,12 +154,8 @@ class GitHubReporter extends Extension
                 'auth' => ['token', $TOKEN],
             ]);
         } catch (RequestException $ex) {
-            $this->writeln('');
-            $this->writeln('');
             $this->writeln("Error on comment in github: {$ex->getMessage()}");
         } catch (InvalidArgumentException $ex) {
-            $this->writeln('');
-            $this->writeln('');
             $this->writeln("Error on comment in github: {$ex->getMessage()}");
         }
     }
@@ -186,7 +181,7 @@ class GitHubReporter extends Extension
         $message .= join("\n", $this->tests);
 
         if ($footer) {
-            $message .= sprintf($lang['footer'], phpversion());
+            $message .= "\n\n*" . sprintf($lang['footer'], 'PHP v' . phpversion()) . '*';
         }
 
         return $message;

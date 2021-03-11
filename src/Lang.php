@@ -9,10 +9,10 @@ class Lang
     private static $langs = [
         'pt-br' => [
             'success' => ':sunglasses: Parabéns, seus testes passaram...',
-            'fail' => ':rage: Seus testes falharam, aconteceram %u erros',
+            'fail' => ':rage: Seus testes falharam, aconteceram %u erro(s)',
             'footer' => 'Testes foram realizados usando %s',
         ],
-        'us' => [
+        'en-us' => [
             'success' => ':sunglasses: Congratulations, your tests have passed...',
             'fail' => ':rage: Your tests failed, there were %u errors',
             'footer' => 'Tests were performed using %s',
