@@ -1,11 +1,30 @@
-version: '3.5'
+version: '3.7'
+networks:
+  github:
+    name: github
+    driver: bridge
 
 services:
 
+  nginx:
+    image: likesistemas/nginx:latest
+    environment:
+      - HOST_PHP=php
+      - PORTA_PHP=9000
+      - INDEX_FILE=index.php
+    volumes:
+      - ./public/:/var/www/public/
+    ports:
+      - 8081:80
+    networks:
+      - github
+    links:
+      - php
+    depends_on:
+      - php
+
   php:
-    image: likesistemas/php-dev:${PHP_VERSION}
-    entrypoint: bash
-    command: composer test:ci
+    image: likesistemas/php-dev:${PHP_VERSION:-56}
     environment:
       - GITHUB_TOKEN=$GITHUB_TOKEN
       - GITHUB_OWNER=$GITHUB_OWNER
@@ -16,5 +35,18 @@ services:
       - TEST_FOOTER=$TEST_FOOTER
     volumes:
       - ./:/var/www/
-    stdin_open: true
-    tty: true
+    networks:
+      - github
+  
+  selenium:
+    image: selenium/standalone-chrome:latest
+    ports:
+      - 4444
+    networks:
+      - github
+    links:
+      - php
+      - nginx
+    depends_on:
+      - php
+      - nginx

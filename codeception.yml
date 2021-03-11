@@ -1,6 +1,39 @@
 suites:
+
     unit:
-        path: .
+        path: ./unit/
+
+    acceptance:
+        actor: AcceptanceTester
+        path: ./acceptance/
+        modules:
+            enabled:
+                - WebDriver
+                - \Helper\Acceptance
+            config:
+                WebDriver:
+                    url: http://nginx/
+                    host: selenium
+                    port: 4444
+                    browser: chrome
+        step_decorators:
+            - Codeception\Step\ConditionalAssertion
+            - Codeception\Step\TryTo
+            - Codeception\Step\Retry
+
+    api:
+        actor: ApiTester
+        path: ./api/
+        modules:
+            enabled:
+                - REST:
+                    url: &url http://nginx/
+                    depends: PhpBrowser
+            config:
+                PhpBrowser:
+                    url: *url
+                    headers:
+                        X-ENVIRONMENT: test
 
 settings:
     shuffle: true
