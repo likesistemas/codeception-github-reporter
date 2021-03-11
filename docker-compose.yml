@@ -1,6 +1,7 @@
 version: '3.7'
 networks:
   github:
+    name: github
     driver: bridge
 
 services:

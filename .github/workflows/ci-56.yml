@@ -26,5 +26,10 @@ jobs:
 
       - name: Run tests
         run: |
-          docker-compose run php composer update
-          docker-compose up
+          docker-compose up -d
+          echo $(docker run -t --network github jwilder/dockerize -wait http://nginx/ -timeout 60s)
+          docker ps -a
+          docker-compose logs php
+          docker-compose exec composer test:ci
+          docker-compose down
+          
