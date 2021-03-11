@@ -1,7 +1,7 @@
 {
     "files.encoding": "utf8",
     "[php]": {
-        "editor.defaultFormatter": "fterrag.vscode-php-cs-fixer"
+        "editor.defaultFormatter": "junstyle.php-cs-fixer"
     },
     "php-cs-fixer.onsave": true,
     "php-cs-fixer.showOutput": false,

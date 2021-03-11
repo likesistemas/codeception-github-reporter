@@ -1,0 +1,16 @@
+{
+	"dockerComposeFile": [
+		"../docker-compose.yml"
+	],
+	"service": "php",
+  	"shutdownAction": "none",
+	"workspaceFolder": "/var/www/",
+	"extensions": [
+		"bmewburn.vscode-intelephense-client",
+		"hbenl.vscode-test-explorer",
+		"recca0120.vscode-phpunit",
+		"eamodio.gitlens",
+		"mhutchie.git-graph",
+		"junstyle.php-cs-fixer"
+	]
+}

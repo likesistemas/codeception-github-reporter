@@ -13,8 +13,13 @@ class GitHubReporterTest extends TestCase
         $this->assertInstanceOf(GitHubReporter::class, $instance);
     }
 
-    public function testError()
+    public function testAssertFalse()
     {
         $this->assertTrue(false);
+    }
+
+    public function testError()
+    {
+        $this->assertTrue();
     }
 }

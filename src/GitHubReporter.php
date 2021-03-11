@@ -6,7 +6,6 @@ use Codeception\Event\FailEvent;
 use Codeception\Event\TestEvent;
 use Codeception\Events;
 use Codeception\Extension;
-use Codeception\Subscriber\Console;
 use Codeception\Test\Descriptor;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\RequestException;
@@ -14,8 +13,12 @@ use InvalidArgumentException;
 
 class GitHubReporter extends Extension
 {
+
     /** @var string */
-    private $line = '';
+    private $currentTest = '';
+
+    /** @var string */
+    private $currentTestSuit;
 
     /** @var array */
     private $tests = [];
@@ -47,29 +50,27 @@ class GitHubReporter extends Extension
 
     protected function _write($message)
     {
-        $this->line .= $message;
+        $this->currentTest .= $message;
     }
 
     protected function _writeln($message)
     {
-        $this->line .= $message;
+        $this->currentTest .= $message;
 
-        if (strlen($this->line) > 0) {
-            $this->tests[] = $this->line;
-            $this->line = '';
+        if (strlen($this->currentTest) > 0) {
+            $this->tests[$this->currentTestSuit][] = $this->currentTest;
+            $this->currentTest = '';
         }
     }
 
     public function beforeSuite($e)
     {
-        $suiteName = ucfirst($e->getSuite()->getName());
-        $this->_writeln("\n<details><summary>{$suiteName} Tests ({$e->getSuite()->count()})</summary>");
+        $this->currentTestSuit = ucfirst($e->getSuite()->getName()) . " Tests ({$e->getSuite()->count()})";
         $this->standardReporter->beforeSuite($e);
     }
 
     public function afterSuite($e)
     {
-        $this->_writeln('</details>');
         $this->standardReporter->afterSuite($e);
     }
 
@@ -104,7 +105,7 @@ class GitHubReporter extends Extension
         $time = ($seconds % 60).(($milliseconds === 0) ? '' : '.'.$milliseconds);
 
         $this->_write(Descriptor::getTestSignature($e->getTest()));
-        $this->_writeln(' ('.$time."s)\n");
+        $this->_writeln(' ('.$time.'s)');
 
         $this->standardReporter->endTest($e);
     }
@@ -117,11 +118,21 @@ class GitHubReporter extends Extension
         $error = [];
         $error[] = $e->getCount().') '.Descriptor::getTestAsString($failedTest);
         $error[] = Descriptor::getTestFullName($failedTest);
-        $error[] = $fail->getMessage();
+        if ($fail->getMessage()) {
+            $error[] = $fail->getMessage();
+        }
+
+        $trace = $this->getExceptionTrace($fail);
+        if ($trace) {
+            $error += $trace;
+        }
+
         $this->errors[] = $error;
 
         $this->standardReporter->printFail($e);
     }
+
+    use StackTrace;
 
     public function result()
     {
@@ -186,7 +197,12 @@ class GitHubReporter extends Extension
             $message .= "\n\n";
         }
 
-        $message .= join("\n", $this->tests);
+        foreach ($this->tests as $suiteName => $suiteTests) {
+            $message .= '<details>';
+            $message .= "<summary>{$suiteName}</summary>\n";
+            $message .= '<p>' . join('<br>', $suiteTests) . '</p>';
+            $message .= '</details>';
+        }
 
         if ($footer) {
             $message .= "\n\n<sup>*" . sprintf($lang['footer'], 'PHP v' . phpversion()) . '*</sup>';
