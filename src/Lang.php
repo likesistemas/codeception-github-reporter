@@ -4,7 +4,7 @@ namespace Like\Codeception;
 
 class Lang
 {
-    const DEFAULT = 'pt-br';
+    const LANG_DEFAULT = 'pt-br';
 
     private static $langs = [
         'pt-br' => [
@@ -22,7 +22,7 @@ class Lang
     public static function getLang($lang)
     {
         if (! isset(self::$langs[$lang])) {
-            $lang = self::DEFAULT;
+            $lang = self::LANG_DEFAULT;
         }
 
         return self::$langs[$lang];

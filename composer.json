@@ -30,6 +30,6 @@
         "codeception/module-asserts": "^1.0.0"
     },
     "scripts": {
-        "test:ci": "codecept run --ext \"Like\\Codeception\\GitHubReporter\""
+        "test:ci": "codecept run --no-exit --ext \"Like\\Codeception\\GitHubReporter\""
     }
 }

@@ -61,7 +61,8 @@ class GitHubReporter extends Extension
 
     public function beforeSuite($e)
     {
-        $this->_writeln('');
+        $suiteName = ucfirst($e->getSuite()->getName());
+        $this->_writeln("\n### {$suiteName} Tests ({$e->getSuite()->count()})");
         $this->standardReporter->beforeSuite($e);
     }
 
@@ -85,7 +86,7 @@ class GitHubReporter extends Extension
 
     public function skipped()
     {
-        $this->_write(':white_circle: ');
+        $this->_write('- [ ] :white_circle: ');
         $this->standardReporter->testSkipped($e);
     }
 
@@ -181,7 +182,7 @@ class GitHubReporter extends Extension
         $message .= join("\n", $this->tests);
 
         if ($footer) {
-            $message .= "\n\n*" . sprintf($lang['footer'], 'PHP v' . phpversion()) . '*';
+            $message .= "\n\n<sup>*" . sprintf($lang['footer'], 'PHP v' . phpversion()) . '*</sup>';
         }
 
         return $message;
