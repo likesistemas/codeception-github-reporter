@@ -12,6 +12,7 @@ use Codeception\TestInterface;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\RequestException;
 use InvalidArgumentException;
+use LogicException;
 
 class GitHubReporter extends Extension
 {
@@ -163,6 +164,8 @@ class GitHubReporter extends Extension
                 return sprintf($this->lang['image'], $url);
             } catch (RequestException $ex) {
                 $this->writeln("Error on upload image: {$ex->getMessage()}");
+            } catch (LogicException $ex) {
+                $this->writeln($ex->getMessage());
             } catch (InvalidArgumentException $ex) {
                 $this->writeln($ex->getMessage());
             }
