@@ -8,6 +8,7 @@ use LogicException;
 class UploadImage
 {
     const URL = 'https://api.imgbb.com/1/upload';
+    const EXPIRATION_IN_SECONDS = 10080; // One week
 
     /** @var string */
     private $token;
@@ -19,8 +20,12 @@ class UploadImage
 
     public function upload($fileToUpload)
     {
+        $url = self::URL .
+            '?expiration=' . self::EXPIRATION_IN_SECONDS .
+            '&key=' . $this->token;
+
         $client = new Client();
-        $response = $client->request('POST', self::URL . "?expiration=600&key={$this->token}", [
+        $response = $client->request('POST', $url, [
             'multipart' => [
                 [
                     'name'     => 'image',
