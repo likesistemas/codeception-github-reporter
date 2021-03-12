@@ -23,6 +23,7 @@ jobs:
           echo "GITHUB_REPO=codeception-github-reporter" >> .env
           echo "GITHUB_PR_NUMBER=${{github.event.number}}" >> .env
           echo "GITHUB_TOKEN=${{ secrets.GITHUB_TOKEN }}" >> .env
+          echo "IMGBB_TOKEN=${{ secrets.IMGBB_TOKEN }}" >> .env
           echo "PHP_VERSION=74" >> .env
 
       - name: Run tests
