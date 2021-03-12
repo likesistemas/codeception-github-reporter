@@ -131,7 +131,6 @@ class GitHubReporter extends Extension
         if ($failedTest instanceof ScenarioDriven) {
             $reports = $this->getReports($failedTest);
             if ($reports) {
-                var_dump($reports);
                 $error[] = $reports;
             }
         } else {
@@ -152,7 +151,7 @@ class GitHubReporter extends Extension
     {
         $reports = $failedTest->getMetadata()->getReports();
         if (isset($reports['png'])) {
-            $token = getenv('TOKEN_IMGBB');
+            $token = getenv('IMGBB_TOKEN');
             
             try {
                 if (! $token) {
@@ -227,7 +226,7 @@ class GitHubReporter extends Extension
         } else {
             $message .= sprintf($lang['fail'], count($this->errors))."\n\n";
             foreach ($this->errors as $error) {
-                $message .= "```\n".join("\n", $error)."\n```\n";
+                $message .= "```Markdown\n".join("\n", $error)."\n```\n";
             }
             $message .= "\n\n";
         }

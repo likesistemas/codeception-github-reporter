@@ -3,6 +3,7 @@
 namespace Like\Codeception;
 
 use GuzzleHttp\Client;
+use LogicException;
 
 class UploadImage
 {
@@ -29,7 +30,19 @@ class UploadImage
         ]);
 
         $body = (string) $response->getBody();
+        if (! $body) {
+            throw new LogicException('Body is empty.');
+        }
+
         $json = json_decode($body, true);
+        if (! is_array($json)) {
+            throw new LogicException('Body is json. Body: ' . $body);
+        }
+
+        if (! isset($json['data']) || ! isset($json['data']['url'])) {
+            throw new LogicException('Body is valid json. Body: ' . $body);
+        }
+
         return $json['data']['url'];
     }
 }
