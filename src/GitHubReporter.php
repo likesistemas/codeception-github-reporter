@@ -7,12 +7,17 @@ use Codeception\Event\TestEvent;
 use Codeception\Events;
 use Codeception\Extension;
 use Codeception\Test\Descriptor;
+use Codeception\Test\Interfaces\ScenarioDriven;
+use Codeception\TestInterface;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\RequestException;
 use InvalidArgumentException;
 
 class GitHubReporter extends Extension
 {
+
+    /** @var array */
+    private $lang;
 
     /** @var string */
     private $currentTest = '';
@@ -34,6 +39,7 @@ class GitHubReporter extends Extension
         $this->options['silent'] = false; // turn on printing for this extension
         $this->_reconfigure(['settings' => ['silent' => true]]); // turn off printing for everything else
         $this->standardReporter = new Console($this->options);
+        $this->lang = Lang::getLang(getenv('TEST_LANG'));
     }
 
     // we are listening for events
@@ -122,9 +128,17 @@ class GitHubReporter extends Extension
             $error[] = $fail->getMessage();
         }
 
-        $trace = $this->getExceptionTrace($fail);
-        if ($trace) {
-            $error += $trace;
+        if ($failedTest instanceof ScenarioDriven) {
+            $reports = $this->getReports($failedTest);
+            if ($reports) {
+                var_dump($reports);
+                $error[] = $reports;
+            }
+        } else {
+            $trace = $this->getExceptionTrace($fail);
+            if ($trace) {
+                $error += $trace;
+            }
         }
 
         $this->errors[] = $error;
@@ -134,17 +148,38 @@ class GitHubReporter extends Extension
 
     use StackTrace;
 
+    private function getReports(TestInterface $failedTest)
+    {
+        $reports = $failedTest->getMetadata()->getReports();
+        if (isset($reports['png'])) {
+            $token = getenv('TOKEN_IMGBB');
+            
+            try {
+                if (! $token) {
+                    throw new InvalidArgumentException('To upload it informs the environment variable `TOKEN_IMGBB`.');
+                }
+
+                $upload = new UploadImage($token);
+                $url = $upload->upload($reports['png']);
+                return sprintf($this->lang['image'], $url);
+            } catch (RequestException $ex) {
+                $this->writeln("Error on upload image: {$ex->getMessage()}");
+            } catch (InvalidArgumentException $ex) {
+                $this->writeln($ex->getMessage());
+            }
+        }
+    }
+
     public function result()
     {
         $TITLE = getenv('TEST_TITLE');
         $FOOTER = (getenv('TEST_FOOTER') ?: 'true') === 'true';
-        $LANG = Lang::getLang(getenv('TEST_LANG'));
         $OWNER = getenv('GITHUB_OWNER');
         $REPO = getenv('GITHUB_REPO');
         $PR_NUMBER = getenv('GITHUB_PR_NUMBER');
         $TOKEN = getenv('GITHUB_TOKEN');
 
-        $body = $this->getBodyMessage($LANG, $TITLE, $FOOTER);
+        $body = $this->getBodyMessage($this->lang, $TITLE, $FOOTER);
         $this->writeln('');
         $this->writeln($body);
 

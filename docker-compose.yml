@@ -33,6 +33,7 @@ services:
       - TEST_LANG=$TEST_LANG
       - TEST_TITLE=$TEST_TITLE
       - TEST_FOOTER=$TEST_FOOTER
+      - TOKEN_IMGBB=$TOKEN_IMGBB
     volumes:
       - ./:/var/www/
     networks:
