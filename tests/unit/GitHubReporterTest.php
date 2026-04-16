@@ -6,16 +6,16 @@ use Like\Codeception\GitHubReporter;
 use PHPUnit\Framework\TestCase;
 
 class GitHubReporterTest extends TestCase {
-	public function testInstance() {
+	public function testInstance(): void {
 		$instance = new GitHubReporter([], []);
 		$this->assertInstanceOf(GitHubReporter::class, $instance);
 	}
 
-	public function testAssertFalse() {
+	public function testAssertFalse(): void {
 		$this->assertTrue(false);
 	}
 
-	public function testError() {
-		$this->assertTrue(true);
+	public function testError(): void {
+		$this->assertTrue();
 	}
 }

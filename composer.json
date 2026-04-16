@@ -33,7 +33,8 @@
         "codeception/module-phpbrowser": "^1.0 || ^2.0",
         "codeception/module-db": "^1.1 || ^3.0",
         "phpstan/phpstan": "^2.1",
-        "friendsofphp/php-cs-fixer": "^3.95"
+        "friendsofphp/php-cs-fixer": "^3.95",
+        "php-parallel-lint/php-parallel-lint": "^1.4"
     },
     "scripts": {
         "fix": "php-cs-fixer fix",

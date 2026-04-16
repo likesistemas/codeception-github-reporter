@@ -48,6 +48,7 @@ jobs:
           docker compose exec -T php composer lint
 
       - name: Run PHP Unit
+        continue-on-error: true
         run: |
           docker compose exec -T php composer test
 

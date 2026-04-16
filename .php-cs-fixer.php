@@ -34,6 +34,7 @@ $excludes = [
 	'.vscode',
 	'.github',
 	'.devcontainer',
+	'tests/_support/_generated/',
 ];
 
 $finder = PhpCsFixer\Finder::create()
