@@ -41,7 +41,7 @@
         "fix:ci": "php-cs-fixer fix --dry-run --stop-on-violation",
         "test": "codecept run --no-exit",
         "test:ci": "codecept run --no-exit --ext \"Like\\Codeception\\GitHubReporter\"",
-        "lint": "parallel-lint --colors --exclude vendor/ .",
+        "lint": "parallel-lint --colors --exclude vendor/ --exclude ./tests/_support/_generated/ .",
         "analyse": ["codecept build","phpstan analyse"],
         "analyse:baseline": "phpstan analyse --generate-baseline",
         "refactor": "rector process"
