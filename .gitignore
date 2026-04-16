@@ -2,3 +2,4 @@
 .history/
 .env
 composer.lock
+.php-cs-fixer.cache
