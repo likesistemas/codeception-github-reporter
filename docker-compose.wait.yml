@@ -1,7 +1,8 @@
 version: '3.7'
 
 networks:
-  default:
+  github:
+    name: github
     driver: bridge
 
 services:
@@ -10,4 +11,4 @@ services:
     image: jwilder/dockerize:latest
     command: -wait tcp://php:9000 -timeout 120s
     networks:
-      - default
+      - github
