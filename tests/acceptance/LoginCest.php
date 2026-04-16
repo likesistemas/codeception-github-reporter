@@ -1,10 +1,8 @@
 <?php
 
-class LoginCest
-{
-    public function loginSuccessfully(AcceptanceTester $I)
-    {
-        $I->amOnPage('/');
-        $I->see('_');
-    }
+class LoginCest {
+	public function loginSuccessfully(AcceptanceTester $I) {
+		$I->amOnPage('/');
+		$I->see('_');
+	}
 }
