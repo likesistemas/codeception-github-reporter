@@ -7,13 +7,14 @@ use Codeception\Event\TestEvent;
 use Codeception\Events;
 use Codeception\Extension;
 use Codeception\Test\Descriptor;
+use Codeception\Test\Interfaces\Descriptive;
+use Codeception\Test\Interfaces\Plain;
 use Codeception\Test\Interfaces\ScenarioDriven;
 use Codeception\TestInterface;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\RequestException;
 use InvalidArgumentException;
 use LogicException;
-use PHPUnit\Framework\SelfDescribing;
 
 class GitHubReporter extends Extension {
 	use StackTrace;
@@ -160,23 +161,23 @@ class GitHubReporter extends Extension {
 	}
 
 	private function getTestSignature(TestInterface $test): string {
-		if ($test instanceof SelfDescribing) {
+		if ($test instanceof Descriptive) {
 			return Descriptor::getTestSignature($test);
 		}
 
-		return get_class($test);
+		return method_exists($test, 'toString') ? $test->toString() : get_class($test);
 	}
 
 	private function getTestAsString(TestInterface $test): string {
-		if ($test instanceof SelfDescribing) {
+		if ($test instanceof Descriptive) {
 			return Descriptor::getTestAsString($test);
 		}
 
-		return get_class($test);
+		return method_exists($test, 'toString') ? $test->toString() : get_class($test);
 	}
 
 	private function getTestFullName(TestInterface $test): string {
-		if ($test instanceof SelfDescribing) {
+		if ($test instanceof Descriptive || $test instanceof Plain) {
 			return Descriptor::getTestFullName($test);
 		}
 
