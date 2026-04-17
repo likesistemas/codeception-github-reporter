@@ -13,6 +13,7 @@ use GuzzleHttp\Client;
 use GuzzleHttp\Exception\RequestException;
 use InvalidArgumentException;
 use LogicException;
+use PHPUnit\Framework\SelfDescribing;
 
 class GitHubReporter extends Extension {
 	use StackTrace;
@@ -101,7 +102,7 @@ class GitHubReporter extends Extension {
 		$seconds = (int) ($milliseconds = (int) ($seconds_input * 1000)) / 1000;
 		$time = ($seconds % 60).(($milliseconds === 0) ? '' : '.'.$milliseconds);
 
-		$this->_write(Descriptor::getTestSignature($e->getTest()));
+		$this->_write($this->getTestSignature($e->getTest()));
 		$this->_writeln(' ('.$time.'s)');
 
 		$this->standardReporter->endTest($e);
@@ -112,8 +113,8 @@ class GitHubReporter extends Extension {
 		$fail = $e->getFail();
 
 		$error = [];
-		$error[] = $eventNumber . ') ' . Descriptor::getTestAsString($failedTest);
-		$error[] = Descriptor::getTestFullName($failedTest);
+		$error[] = $eventNumber . ') ' . $this->getTestAsString($failedTest);
+		$error[] = $this->getTestFullName($failedTest);
 		if ($fail->getMessage()) {
 			$error[] = $fail->getMessage();
 		}
@@ -156,6 +157,30 @@ class GitHubReporter extends Extension {
 				$this->writeln($ex->getMessage());
 			}
 		}
+	}
+
+	private function getTestSignature(TestInterface $test): string {
+		if ($test instanceof SelfDescribing) {
+			return Descriptor::getTestSignature($test);
+		}
+
+		return get_class($test);
+	}
+
+	private function getTestAsString(TestInterface $test): string {
+		if ($test instanceof SelfDescribing) {
+			return Descriptor::getTestAsString($test);
+		}
+
+		return get_class($test);
+	}
+
+	private function getTestFullName(TestInterface $test): string {
+		if ($test instanceof SelfDescribing) {
+			return Descriptor::getTestFullName($test);
+		}
+
+		return method_exists($test, 'toString') ? $test->toString() : get_class($test);
 	}
 
 	public function result() {

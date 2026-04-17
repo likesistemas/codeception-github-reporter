@@ -3,18 +3,16 @@
 namespace Like\Codeception;
 
 use Codeception\Lib\Console\Message;
-use PHPUnit\Event\Test\MarkedIncomplete;
-use PHPUnit\Event\Test\Skipped;
 
 trait StackTrace {
 	public function getExceptionTrace($e) {
 		$lines = [];
 
-		if ($e instanceof Skipped or $e instanceof MarkedIncomplete) {
+		if ($this->isSkippedOrIncomplete($e)) {
 			return;
 		}
 
-		$trace = \PHPUnit\Util\Filter::getFilteredStacktrace($e, false);
+		$trace = \PHPUnit\Util\Filter::getFilteredStacktrace($e);
 
 		$i = 0;
 		foreach ($trace as $step) {
@@ -39,7 +37,7 @@ trait StackTrace {
 		if (method_exists($e, 'getPrevious')) {
 			$prev = $e->getPrevious();
 			if ($prev) {
-				$lines += $this->printExceptionTrace($prev);
+				$lines += $this->getExceptionTrace($prev);
 			}
 		}
 
@@ -48,5 +46,14 @@ trait StackTrace {
 
 	private function message($message) {
 		return new Message($message);
+	}
+
+	private function isSkippedOrIncomplete($e): bool {
+		$phpUnit10Skipped = class_exists('PHPUnit\\Event\\Test\\Skipped') && $e instanceof \PHPUnit\Event\Test\Skipped;
+		$phpUnit10Incomplete = class_exists('PHPUnit\\Event\\Test\\MarkedIncomplete') && $e instanceof \PHPUnit\Event\Test\MarkedIncomplete;
+		$legacySkipped = class_exists('PHPUnit\\Framework\\SkippedTest') && $e instanceof \PHPUnit\Framework\SkippedTest;
+		$legacyIncomplete = class_exists('PHPUnit\\Framework\\IncompleteTest') && $e instanceof \PHPUnit\Framework\IncompleteTest;
+
+		return $phpUnit10Skipped || $phpUnit10Incomplete || $legacySkipped || $legacyIncomplete;
 	}
 }
