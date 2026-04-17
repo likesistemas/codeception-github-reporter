@@ -109,7 +109,7 @@ class GitHubReporter extends Extension {
 		$this->standardReporter->endTest($e);
 	}
 
-	public function printFailed(FailEvent $e, int $eventNumber): void {
+	public function printFailed(FailEvent $e, ?string $eventNumber=null): void {
 		$failedTest = $e->getTest();
 		$fail = $e->getFail();
 
@@ -160,7 +160,7 @@ class GitHubReporter extends Extension {
 		}
 	}
 
-	private function getTestSignature(TestInterface $test): string {
+	private function getTestSignature($test): string {
 		if ($test instanceof Descriptive) {
 			return Descriptor::getTestSignature($test);
 		}
@@ -168,7 +168,7 @@ class GitHubReporter extends Extension {
 		return method_exists($test, 'toString') ? $test->toString() : get_class($test);
 	}
 
-	private function getTestAsString(TestInterface $test): string {
+	private function getTestAsString($test): string {
 		if ($test instanceof Descriptive) {
 			return Descriptor::getTestAsString($test);
 		}
@@ -176,7 +176,7 @@ class GitHubReporter extends Extension {
 		return method_exists($test, 'toString') ? $test->toString() : get_class($test);
 	}
 
-	private function getTestFullName(TestInterface $test): string {
+	private function getTestFullName($test): string {
 		if ($test instanceof Descriptive || $test instanceof Plain) {
 			return Descriptor::getTestFullName($test);
 		}
