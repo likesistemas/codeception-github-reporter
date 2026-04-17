@@ -12,7 +12,7 @@ trait StackTrace {
 			return;
 		}
 
-		$trace = \PHPUnit\Util\Filter::getFilteredStacktrace($e);
+		$trace = explode("\n", \PHPUnit\Util\Filter::getFilteredStacktrace($e));
 
 		$i = 0;
 		foreach ($trace as $step) {

@@ -6,7 +6,7 @@ use Codeception\Event\FailEvent;
 use Codeception\Subscriber\Console as SubscriberConsole;
 
 class Console extends SubscriberConsole {
-	public function printFail(FailEvent $event, ?int $eventNumber = null): void {
+	public function printFail(FailEvent $event, ?string $eventNumber = null): void {
 		$method = new \ReflectionMethod(SubscriberConsole::class, 'printFail');
 
 		$args = [$event];
