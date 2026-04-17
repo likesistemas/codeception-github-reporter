@@ -1,16 +1,31 @@
 {
+	"name": "codeception-github-reporter",
 	"dockerComposeFile": [
 		"../docker-compose.yml"
 	],
 	"service": "php",
   	"shutdownAction": "none",
 	"workspaceFolder": "/var/www/",
-	"extensions": [
-		"bmewburn.vscode-intelephense-client",
-		"hbenl.vscode-test-explorer",
-		"recca0120.vscode-phpunit",
-		"eamodio.gitlens",
-		"mhutchie.git-graph",
-		"junstyle.php-cs-fixer"
-	]
+	"customizations": {
+		"vscode": {
+			"extensions": [
+				"bmewburn.vscode-intelephense-client",
+				"hbenl.vscode-test-explorer",
+				"recca0120.vscode-phpunit",
+				"eamodio.gitlens",
+				"mhutchie.git-graph",
+				"junstyle.php-cs-fixer",
+				"janbn.git-last-commit-message",
+				"kasik96.latte",
+				"seatonjiang.gitmoji-vscode"
+			]
+		}
+	},
+	"features": {
+		"ghcr.io/devcontainers/features/common-utils:2.5.7": {
+			"installZsh": true,
+			"configureZshAsDefaultShell": true,
+			"upgradePackages": true
+		}
+	}
 }

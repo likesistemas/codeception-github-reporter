@@ -1,0 +1,15 @@
+includes:
+	- phpstan-baseline.neon
+
+parameters:
+	level: 5
+	paths:
+		- src
+		- tests
+	scanDirectories:
+		- tests/_support/_generated/
+	bootstrapFiles:
+		- vendor/codeception/codeception/autoload.php
+	excludePaths:
+		analyse:
+			- tests/_support/_generated/
