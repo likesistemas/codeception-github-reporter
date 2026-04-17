@@ -1,4 +1,5 @@
 {
+	"name": "codeception-github-reporter",
 	"dockerComposeFile": [
 		"../docker-compose.yml"
 	],
